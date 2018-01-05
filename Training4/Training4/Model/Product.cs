@@ -8,6 +8,20 @@ namespace Training4.Model
 {
     public class Product
     {
-        //product
+        public static string[] type = new String[] {"Engine", "Gears", "Body" };
+
+        public Product(string iD, string name, int price, string type)
+        {
+            ID = iD;
+            Name = name;
+            Price = price;
+            Type = type;
+        }
+
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+        public string  Type { get; set; }
+
     }
 }
