@@ -36,9 +36,9 @@ namespace Training4.ViewModel
             set { newName = value; RaisePropertyChanged(); }
         }
 
-        private int newPrice;
+        private string newPrice;
 
-        public int NewPrice
+        public string NewPrice
         {
             get { return newPrice; }
             set { newPrice = value; RaisePropertyChanged(); }
@@ -63,45 +63,61 @@ namespace Training4.ViewModel
 
             ClientBtnClick = new RelayCommand(()=>
             {
-                StartClient(ip, port, NewObject, GuiRefresh);
+                StartClient(ip, port, GuiRefresh);
             },()=>{ return !isServer && !isConnected; });
 
 
             ServerBtnClick = new RelayCommand(() =>
             {
-                StartServer(ip, port, NewObject, GuiRefresh);
+                StartServer(ip, port, GuiRefresh);
             }, () => { return !isServer && !isConnected; });
 
 
             AddBtnClick = new RelayCommand(() =>
             {
-                //add new product
+                NewObject();
             }, () => { return CanExecuteAddBtnClick(); });
         }
 
         #region Methods
-        private void StartServer(string ip, int port, Action NewObject, Action<String> GuiRefresh)
+        private void StartServer(string ip, int port, Action<String> GuiRefresh)
         {
-            server = new Server(ip, port, NewObject, GuiRefresh);
+            server = new Server(ip, port, GuiRefresh);
             isServer = true;
             isConnected = true;
         }
 
-        private void StartClient(string ip, int port, Action NewObject, Action<String> GuiRefresh)
+        private void StartClient(string ip, int port, Action<String> GuiRefresh)
         {
-            client = new Client(ip, port, NewObject, GuiRefresh);
+            client = new Client(ip, port, GuiRefresh);
             isConnected = true;
         }
 
         private void NewObject()
         {
-            //client or server to publish/broadcast new object
-            //send string
+            string newObjectToString = "@" + newID + ":" + newName + ":" + newPrice + ":" + newType;
+
+            if (isServer)
+            {
+                //tell server to broadcast the string
+                server.Broadcast(null, newObjectToString);
+            }
+            else
+            {
+                //tell client to send msg to server, which has to broadcast the string
+                client.Send(newObjectToString);
+            }
+
+            NewID = "";
+            NewName = "";
+            NewPrice = "";
+            NewType = "";
         }
 
         private void GuiRefresh(string newProduct)
         {
-            //split string
+            //in GUI thread
+            //split string: name@id:name:price:type
             //store into Products
         }
 
@@ -110,7 +126,7 @@ namespace Training4.ViewModel
             //check if fields are filled/valid and if connected.
             if (isConnected)
             {
-                if(NewID.Length > 0 && NewName.Length > 0 && NewPrice.ToString().Length > 0 && NewType.Length > 0) return true;
+                if(NewID.Length > 0 && NewName.Length > 0 && NewPrice.Length > 0 && NewType.Length > 0) return true;
             }
             return false;
         }
