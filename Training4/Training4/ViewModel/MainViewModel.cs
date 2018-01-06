@@ -63,13 +63,13 @@ namespace Training4.ViewModel
 
             ClientBtnClick = new RelayCommand(()=>
             {
-                StartClient(ip, port, GuiRefresh);
+                StartClient(ip, port, NewObject, GuiRefresh);
             },()=>{ return !isServer && !isConnected; });
 
 
             ServerBtnClick = new RelayCommand(() =>
             {
-                StartServer(ip, port, GuiRefresh);
+                StartServer(ip, port, NewObject, GuiRefresh);
             }, () => { return !isServer && !isConnected; });
 
 
@@ -80,26 +80,39 @@ namespace Training4.ViewModel
         }
 
         #region Methods
-        private void StartServer(string ip, int port, Action<String> GuiRefresh)
+        private void StartServer(string ip, int port, Action NewObject, Action<String> GuiRefresh)
         {
-            
+            server = new Server(ip, port, NewObject, GuiRefresh);
+            isServer = true;
+            isConnected = true;
         }
 
-        private void StartClient(string ip, int port, Action<String> GuiRefresh)
+        private void StartClient(string ip, int port, Action NewObject, Action<String> GuiRefresh)
         {
+            client = new Client(ip, port, NewObject, GuiRefresh);
+            isConnected = true;
+        }
 
+        private void NewObject()
+        {
+            //client or server to publish/broadcast new object
+            //send string
         }
 
         private void GuiRefresh(string newProduct)
         {
-            //set current thread
-            //tell server to broadcast the new product and refresh own gui
+            //split string
+            //store into Products
         }
 
         private bool CanExecuteAddBtnClick()
         {
-            //check if fields are filled and if connected.
-            return true;
+            //check if fields are filled/valid and if connected.
+            if (isConnected)
+            {
+                if(NewID.Length > 0 && NewName.Length > 0 && NewPrice.ToString().Length > 0 && NewType.Length > 0) return true;
+            }
+            return false;
         }
         #endregion
 

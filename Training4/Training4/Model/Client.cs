@@ -11,5 +11,17 @@ namespace Training4.Model
         //receive
         //guiupdate
         //sendmsg
+        private string ip;
+        private int port;
+        private Action newObject;
+        private Action<string> guiRefresh;
+
+        public Client(string ip, int port, Action newObject, Action<string> guiRefresh)
+        {
+            this.ip = ip;
+            this.port = port;
+            this.newObject = newObject;
+            this.guiRefresh = guiRefresh;
+        }
     }
 }
