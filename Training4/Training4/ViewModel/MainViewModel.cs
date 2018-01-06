@@ -116,14 +116,20 @@ namespace Training4.ViewModel
 
         private void GuiRefresh(string newProduct)
         {
-            //in GUI thread
-            //split string: name@id:name:price:type
-            //store into Products
+            string[] raw;
+            string[] productArray;
+            App.Current.Dispatcher.Invoke(() => 
+            {
+                raw = newProduct.Split('@');
+                productArray = raw[1].Split(':');
+
+                Products.Add(new ProductVM(productArray[0], productArray[1], Int32.Parse(productArray[2]), productArray[3]));
+
+            });
         }
 
         private bool CanExecuteAddBtnClick()
         {
-            //check if fields are filled/valid and if connected.
             if (isConnected)
             {
                 if(NewID.Length > 0 && NewName.Length > 0 && NewPrice.Length > 0 && NewType.Length > 0) return true;

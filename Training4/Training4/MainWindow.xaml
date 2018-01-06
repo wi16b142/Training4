@@ -9,35 +9,42 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="42*"/>
-            <RowDefinition Height="67*"/>
-            <RowDefinition Height="211*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="199*"/>
         </Grid.RowDefinitions>
 
-        <Button Content="Act as Server" Margin="0,10,10,7.4" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="25"/>
-        <Button Content="Act as Client" Margin="0,10,100,7.4" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="25"/>
+        <Button Content="Act as Server" Command="{Binding ServerBtnClick}" Margin="0,12,10.4,13.4" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="25"/>
+        <Button Content="Act as Client" Command="{Binding ClientBtnClick}" Margin="0,12,100.4,13.4" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Height="25"/>
 
-        <TabPanel Margin="10,1.6,10.4,5.6" Grid.Row="1">
+        <TabPanel Margin="10,1.6,10.4,4.6" Grid.Row="1">
             <StackPanel Width="100" Height="60">
                 <Label Content="Prod. ID"/>
-                <TextBox Height="25"/>
+                <TextBox Text="{Binding NewID}" Height="25"/>
             </StackPanel>
             <StackPanel Width="100" Height="60" Margin="5,0,-5,0">
                 <Label Content="Name"/>
-                <TextBox Height="25"/>
+                <TextBox Text="{Binding NewName}" Height="25"/>
             </StackPanel>
             <StackPanel Width="100" Height="60" Margin="10,0,-10,0">
                 <Label Content="Price"/>
-                <TextBox Height="25"/>
+                <TextBox Text="{Binding NewPrice}" Height="25"/>
             </StackPanel>
             <StackPanel Width="100" Height="60" Margin="15,0,-15,0">
                 <Label Content="Type"/>
-                <ComboBox Height="25"/>
+                <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding NewType}" Height="25"/>
             </StackPanel>
-            <Button Content="Add" Height="25" Margin="20,26,-50.8,9"/>
+            <Button Content="Add" Command="{Binding AddBtnClick}" Height="25" Margin="20,26,-50.8,9"/>
         </TabPanel>
 
-        <DataGrid Grid.Row="2" Margin="10,9.4,10.4,9.8"/>
+        <DataGrid ItemsSource="{Binding Products}" AutoGenerateColumns="False" Grid.Row="2" Margin="10,10.4,10.4,9.8">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ID}" Header="ID" Width="25*" ClipboardContentBinding="{x:Null}"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="25*" ClipboardContentBinding="{x:Null}"/>
+                <DataGridTextColumn Binding="{Binding Price}" Header="Price" Width="25*" ClipboardContentBinding="{x:Null}"/>
+                <DataGridTextColumn Binding="{Binding Type}" Header="Type" Width="25*" ClipboardContentBinding="{x:Null}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>
